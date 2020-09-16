@@ -1,3 +1,4 @@
+import re
 class automato_finito_deterministico:
 
     def __init__ (self , alphabet , states , transition_function , initial_state , valid_states):
@@ -7,42 +8,72 @@ class automato_finito_deterministico:
         self.initial_state = initial_state
         self.valid_states = valid_states
 
-    def isFinal(self , state) :
+    # Função que verifica se o estado atual é final valido
+    def isValidFinalState(self , state) :
         if state in self.valid_states:
             return True
         else:
             return False
-
-    def isValidsymbol(self , letter):
-        if letter in self.alphabet:
+    # Função que verifica se o simbolo pertecen ao alfabeto do nosso AFD
+    def isValidSymbol(self , symbol):
+        if symbol in self.alphabet:
             return True
         else:
             return False
 
-    def nextState(self , state, letter):
-       return self.transition_function(state , letter)
+    # Função que recebe estado e o simbolo , para a paritr dele e da função de transição retornar o proximo estado
+    def nextState(self , state, symbol):
+       return self.transition_function(state , symbol)
+
+    # Função que analisa a palavra e retorna o estado final da mesma 
+    def lexemeVerify(self , lexeme):
+        state = self.initial_state
+        for symbol in lexeme:
+            if self.isValidSymbol(symbol):
+               state = self.nextState(state , symbol)
+            else:
+                return "err , invalid symbol"
+
+        if self.isValidFinalState(state):
+            return state
+        else:
+            return "err , lexema does not belong to the language" 
+
+        
+
+        
 
 def funcao_de_transicao(state , letter):
     if state == "s0":
-        if letter == "a" or letter == "c":
+        if re.findall("\d", letter):
             return "s1"
-        elif letter == "b":
+        elif re.findall("\w", letter):
+            return "s2"
+        else:
+            return "Serr"
+
+    if state == "s1":
+        if re.findall("\d", letter):
+            return "s1"
+        elif re.findall("\w", letter):
             return "s2"
         else:
             return "err"
+
     if state =="s2":
-        if letter == "a":
-            return "s0"
-        if letter == "b":
+        if re.findall("\w", letter):
             return "s2"
+        elif re.findall("\d", letter):
+            return "s1"
         else:
             return "err"
 
 
 if __name__ == "__main__":
-    c = automato_finito_deterministico(["a","b","c","d","e"],["s0","s1","s2","s3","s4","s5","s6","s7","s8","s9"] , funcao_de_transicao , "s0" , ["s2"])
+    c = automato_finito_deterministico(["a" , "b" , "c"],["s0","s1","s2","s3","s4","s5","s6","s7","s8","s9"] , funcao_de_transicao , "s0" , ["s2"])
 
 
-    print(c.transition_function("s0","c"))
-
+    # print(c.transition_function("s0","c"))
+    # print(c.transition_function("s0","9"))
+    print(c.lexemeVerify("abc"))
 
