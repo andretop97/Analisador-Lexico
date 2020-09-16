@@ -1,12 +1,12 @@
 import re
-class automato_finito_deterministico:
+class DeterministicFiniteAutomaton:
 
-    def __init__ (self , alphabet , states , transition_function , initial_state , valid_states):
+    def __init__ (self , alphabet , states , transitionFunction , initialState , validStates):
         self.alphabet = alphabet
         self.states = states
-        self.transition_function = transition_function
-        self.initial_state = initial_state
-        self.valid_states = valid_states
+        self.transition_function = transitionFunction
+        self.initial_state = initialState
+        self.valid_states = validStates
 
     # Função que verifica se o estado atual é final valido
     def isValidFinalState(self , state) :
@@ -70,7 +70,7 @@ def funcao_de_transicao(state , letter):
 
 
 if __name__ == "__main__":
-    c = automato_finito_deterministico(["a" , "b" , "c"],["s0","s1","s2","s3","s4","s5","s6","s7","s8","s9"] , funcao_de_transicao , "s0" , ["s2"])
+    c = DeterministicFiniteAutomaton(["a" , "b" , "c"],["s0","s1","s2","s3","s4","s5","s6","s7","s8","s9"] , funcao_de_transicao , "s0" , ["s2"])
 
 
     # print(c.transition_function("s0","c"))
