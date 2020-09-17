@@ -10,16 +10,11 @@ class DeterministicFiniteAutomaton:
 
     # Função que verifica se o estado atual é final valido
     def isValidFinalState(self , state) :
-        if state in self.validStates:
-            return True
-        else:
-            return False
+        return state in self.validStates
+
     # Função que verifica se o simbolo pertecen ao alfabeto do nosso AFD
     def isValidSymbol(self , symbol):
-        if symbol in self.alphabet:
-            return True
-        else:
-            return False
+        return symbol in self.alphabet
 
     # Função que recebe estado e o simbolo , para a paritr dele e da função de transição retornar o proximo estado
     def nextState(self , state, symbol):

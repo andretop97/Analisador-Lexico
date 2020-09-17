@@ -8,11 +8,8 @@ class SymbolTable():
         self.symbol[lexeme] = {"lexema": lexeme , "token": token , "tipo": tipo }
 
     def checkSymbolExistence(self , lexeme):
-        if lexeme in self.symbol:
-            return True
-        else: 
-            return False
-
+        return lexeme in self.symbol
+        
 class LexicalAnalyzer:
     def __init__(self):
         self.symbleTable = SymbolTable()
@@ -53,13 +50,16 @@ def funcao_de_transicao(state , letter):
 
 
 if __name__ == "__main__":
-    c = SymbolTable()
-    c.addSymbol("int","int","int")
+    testeSymbolTable = SymbolTable()
+    testeSymbolTable.addSymbol("int","int","int")
 
-    print(c.simbolo)
 
-    d = c.checkSymbolExistence("int")
-    e = c.checkSymbolExistence("batata")
+    testeDFA = DFA.DeterministicFiniteAutomaton(["a" , "b" , "c"],["s0","s1","s2","s3","s4","s5","s6","s7","s8","s9"] , funcao_de_transicao , "s0" , ["s2"])
+    print(testeDFA.lexemeVerify("abc"))
+    print(testeSymbolTable.symbol)
+
+    d = testeSymbolTable.checkSymbolExistence("int")
+    e = testeSymbolTable.checkSymbolExistence("batata")
     print(d , "  " , e)
 
 
