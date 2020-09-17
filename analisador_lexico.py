@@ -1,4 +1,4 @@
-import automato_finito_deterministico as DFA,
+import automato_finito_deterministico as DFA
 import re
 class SymbolTable():
     def __init__(self):
@@ -13,7 +13,7 @@ class SymbolTable():
         else: 
             return False
 
-class lexicalAnalyzer:
+class LexicalAnalyzer:
     def __init__(self):
         self.symbleTable = SymbolTable()
         self.DFA = DFA.DeterministicFiniteAutomaton(["a" , "b" , "c"],["s0","s1","s2","s3","s4","s5","s6","s7","s8","s9"] , funcao_de_transicao , "s0" , ["s2"])
