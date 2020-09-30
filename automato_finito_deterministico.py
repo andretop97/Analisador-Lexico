@@ -7,68 +7,34 @@ class DeterministicFiniteAutomaton:
         self.transitionFunction = transitionFunction
         self.initialState = initialState
         self.validStates = validStates
+        self.currentState = self.initialState
 
     # Função que verifica se o estado atual é final valido
-    def isValidFinalState(self , state) :
-        return state in self.validStates
+    def isValidFinalState(self , currentState) :
+        return currentState in self.validStates
 
-    # Função que verifica se o simbolo pertecen ao alfabeto do nosso AFD
+    # Função que verifica se o simbolo pertecen ao alfabeto do nosso DFA
     def isValidSymbol(self , symbol):
         return symbol in self.alphabet
 
+    # Função que verifica se é o final do lexema
+    def isEndLexeme(self , currentState , symbol):
+        return self.transitionFunction(currentState , symbol) == "Se"
+
+
     # Função que recebe estado e o simbolo , para a paritr dele e da função de transição retornar o proximo estado
-    def nextState(self , state, symbol):
-       return self.transitionFunction(state , symbol)
-
-    # Função que analisa a palavra e retorna o estado final da mesma 
-    def lexemeVerify(self , lexeme):
-        state = self.initialState
-        for symbol in lexeme:
-            if self.isValidSymbol(symbol):
-               state = self.nextState(state , symbol)
+    def nextState(self , currentState, symbol):
+        if self.isValidSymbol(symbol):
+            nextState = self.transitionFunction(currentState , symbol)
+            print("nextState", nextState)
+            if self.isValidFinalState(nextState):
+                if self.isEndLexeme :
+                    return nextState
+                else:
+                    return "Se"
             else:
-                return "err , invalid symbol"
-
-        if self.isValidFinalState(state):
-            return state
+                return nextState
         else:
-            return "err , lexema does not belong to the language" 
+            return "Se"
 
-        
-
-        
-
-# def funcao_de_transicao(state , letter):
-#     if state == "s0":
-#         if re.findall("\d", letter):
-#             return "s1"
-#         elif re.findall("\w", letter):
-#             return "s2"
-#         else:
-#             return "Serr"
-
-#     if state == "s1":
-#         if re.findall("\d", letter):
-#             return "s1"
-#         elif re.findall("\w", letter):
-#             return "s2"
-#         else:
-#             return "err"
-
-#     if state =="s2":
-#         if re.findall("\w", letter):
-#             return "s2"
-#         elif re.findall("\d", letter):
-#             return "s1"
-#         else:
-#             return "err"
-
-
-# if __name__ == "__main__":
-#     c = DeterministicFiniteAutomaton(["a" , "b" , "c"],["s0","s1","s2","s3","s4","s5","s6","s7","s8","s9"] , funcao_de_transicao , "s0" , ["s2"])
-
-
-#     # print(c.transition_function("s0","c"))
-#     # print(c.transition_function("s0","9"))
-#     print(c.lexemeVerify("abc"))
 
