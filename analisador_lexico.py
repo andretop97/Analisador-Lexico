@@ -29,10 +29,11 @@ class DeterministicFiniteAutomaton:
 
     # Função que recebe estado e o simbolo , para a paritr dele e da função de transição retornar o proximo estado
     def nextState(self , currentState, symbol):
-        if self.isValidSymbol(symbol):
-            return self.transitionFunction(currentState , symbol)
-        else:
-            return ["Se", "Símbolo não pertence ao alfabeto (externo)"]
+#        if self.isValidSymbol(symbol):
+#            return self.transitionFunction(currentState , symbol)
+#        else:
+#            return ["Se", "Símbolo não pertence ao alfabeto (externo)"]
+        return self.transitionFunction(currentState , symbol)
 
 
         
@@ -45,21 +46,37 @@ class LexicalAnalyzer:
     def lexicon(self, lexeme):
         return self.symbleTable.symbol[lexeme]
 
+#Caso a leitura finalize no estado s8 as aspas não foram fechadas
+#Caso termine no estado s12 a chave não foi fechada
+
     def readFile(self , fileName):
         state = "s0"
         lexema = ""
+        erro = ""
         listaLexemas = []
+        listaErros = []
         file = open(fileName,"r")
         for line in file:
             for character in line:
                 currentState = self.DFA.nextState(state,character)[0]
-                print(currentState)
+                #print(currentState)
                 if currentState == "Se":
-                    if character not in alphabet:
-                        if self.DFA.isValidFinalState(state):
+#                    if character not in alphabet or character == " ":
+                    if character == " " or character == EOFError or character == "\n":
+                        if currentState == "s8" or currentState == "s12":
+                            print("Erro")
+                            return "Erro"
+                        elif erro != "":
+                            listaErros.append(erro)
+                            erro = ""
+                        elif self.DFA.isValidFinalState(state):
                             listaLexemas.append([lexema, state])
-                    state = "s0"
-                    lexema = ""
+                        state = "s0"
+                        lexema = ""
+                    else:
+                        state = currentState
+                        erro = lexema + erro + character
+                        lexema = ""
                 else:
                     state = currentState
                     lexema = lexema + character
@@ -68,7 +85,10 @@ class LexicalAnalyzer:
                 listaLexemas.append([lexema, state])
 
 
+        print("Lista de lexemas: ")
         print(listaLexemas)
+        print("\nLista de Erros: ")
+        print(listaErros)
 
 
 def teste():
@@ -91,7 +111,7 @@ def teste():
 if __name__ == "__main__":
 
     testeLexicalAnalyzer = LexicalAnalyzer()
-    testeLexicalAnalyzer.readFile("text.txt")
+    testeLexicalAnalyzer.readFile("programa_fonte.txt")
 
 
 
