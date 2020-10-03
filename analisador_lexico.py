@@ -70,6 +70,7 @@ class LexicalAnalyzer:
                             listaErros.append(erro)
                             erro = ""
                         elif self.DFA.isValidFinalState(state):
+                            self.symbleTable.addSymbol(lexema, lexema, "")
                             listaLexemas.append([lexema, state])
                         state = "s0"
                         lexema = ""
@@ -111,7 +112,11 @@ def teste():
 if __name__ == "__main__":
 
     testeLexicalAnalyzer = LexicalAnalyzer()
-    testeLexicalAnalyzer.readFile("programa_fonte.txt")
+    testeLexicalAnalyzer.readFile("text.txt")
+
+    print("\nTabela de símbolos")
+for item in testeLexicalAnalyzer.symbleTable.symbol:
+    print(testeLexicalAnalyzer.symbleTable.symbol[item])
 
 
 
