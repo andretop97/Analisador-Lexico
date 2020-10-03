@@ -91,7 +91,9 @@ if __name__ == "__main__":
     testeLexicalAnalyzer = LexicalAnalyzer()
     testeLexicalAnalyzer.readFile("text.txt")
 
-    print(testeLexicalAnalyzer.symbleTable.symbol)
+
+for item in testeLexicalAnalyzer.symbleTable.symbol:
+    print(testeLexicalAnalyzer.symbleTable.symbol[item])
 
 
 
