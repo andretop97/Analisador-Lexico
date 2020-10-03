@@ -15,14 +15,12 @@ class SymbolTable():
 
 
 class DeterministicFiniteAutomaton:
-
     def __init__ (self , alphabet , states , transitionFunction , initialState , validStates):
         self.alphabet = alphabet
         self.states = states
         self.transitionFunction = transitionFunction
         self.initialState = initialState
         self.validStates = validStates
-        self.currentState = self.initialState
 
     # Função que verifica se o estado atual é final valido
     def isValidFinalState(self , currentState) :
@@ -32,23 +30,10 @@ class DeterministicFiniteAutomaton:
     def isValidSymbol(self , symbol):
         return symbol in self.alphabet
 
-    # Função que verifica se é o final do lexema
-    def isEndLexeme(self , currentState , symbol):
-        return self.transitionFunction(currentState , symbol)[0] == "Se"
-
-
     # Função que recebe estado e o simbolo , para a paritr dele e da função de transição retornar o proximo estado
     def nextState(self , currentState, symbol):
         if self.isValidSymbol(symbol):
-            nextState = self.transitionFunction(currentState , symbol)
-            #print("nextState", nextState)
-            if self.isValidFinalState(nextState):
-                if self.isEndLexeme :
-                    return nextState
-                else:
-                    return ["Se", "Não é um estado válido"]
-            else:
-                return nextState
+            return self.transitionFunction(currentState , symbol)
         else:
             return ["Se", "Símbolo não pertence ao alfabeto (externo)"]
 
@@ -71,8 +56,11 @@ class LexicalAnalyzer:
         for line in file:
             for character in line:
                 nextState = self.DFA.nextState(state,character)
+                print(nextState)
                 if nextState == "Se":
-                    listaLexemas.append([lexema, state])
+                    print(state)
+                    if self.DFA.isValidFinalState(state):
+                        listaLexemas.append([lexema, state])
                     state = "s0"
                     lexema = ""
                 else:
@@ -160,26 +148,17 @@ def funcao_de_transicao(state , symbol):
 
 
 if __name__ == "__main__":
-    # testeSymbolTable = SymbolTable()
-    # testeSymbolTable.addSymbol("int","int","int")
-    # testeDFA = DFA.DeterministicFiniteAutomaton(["a" , "b" , "c"],["s0","s1","s2","s3","s4","s5","s6","s7","s8","s9"] , funcao_de_transicao , "s0" , ["s2"])
-    # print(testeSymbolTable.symbol)
-    # d = testeSymbolTable.checkSymbolExistence("int")
-    # e = testeSymbolTable.checkSymbolExistence("batata")
-    # print(d , "  " , e)
 
 #    testeLexicalAnalyzer = LexicalAnalyzer()
-
 #    testeLexicalAnalyzer.readFile("text.txt")
+
 
     c = DeterministicFiniteAutomaton(alphabet, estados, funcao_de_transicao , "s0" , ["s2"])
 
     simbolo = input("Insira um símbolo\n")
-
     estado = "s0"
 
     for symbol in simbolo:
-
         vetor = c.nextState(estado, symbol)
         estado = vetor[0]
 
