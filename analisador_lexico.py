@@ -1,5 +1,5 @@
 numeros = ["0","1","2","3","4","5","6","7","8","9"]
-letras = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","x","y","z"]
+letras = ["a","A","b","B","c","C","d","D","e","E","f","F","g","G","h","H","i","I","j","J","k","K","l","L","m","M","n","N","o","O","p","P","q","Q","r","R","s","S","t","T","u","U","v","V","x","X","y","Y","z","Z"]
 outros_simbolos = [".", '"', "*", "{", "}", "<", ">", "=", "+", "-", "/", "(", ")", ";"]
 alphabet = numeros + letras + outros_simbolos
 estados =["s0","s1","s2","s3","s4","s5","s6","s7","s8","s9","s10","s11","s12","s13","s14","s15","s16","s17","s18","s19"]
@@ -50,7 +50,7 @@ class DeterministicFiniteAutomaton:
             else:
                 return nextState
         else:
-            return ["Se", "Símbolo não pertence ao alfabeto"]
+            return ["Se", "Símbolo não pertence ao alfabeto (externo)"]
 
 
         
@@ -83,40 +83,79 @@ class LexicalAnalyzer:
 
 
 
-def funcao_de_transicao(state , letter):
+def funcao_de_transicao(state , symbol):
+#    print(state)
 
     if state == "s0":
-        if letter in numeros:
+        if symbol in numeros:
             return ["s1", "numero"]
-        elif letter == '"':
+        elif symbol == '"':
             return ["s7", "Abre aspas"]
-        elif letter in letras:
+        elif symbol in letras:
             return ["s10", "letra"]
-        elif letter == "{":
+        elif symbol == "{":
             return ["s11", "Abre chaves"]
-        elif letter == "<" or letter == ">" or letter == "=":
+        elif symbol == "<" or symbol == ">" or symbol == "=":
             return ["s20", "Maior, menor ou igual"]
-        elif letter == "+" or letter == "-" or letter == "*" or letter == "/":
+        elif symbol == "+" or symbol == "-" or symbol == "*" or symbol == "/":
             return ["s16", "Operador matemático"]
-        elif letter == "(":
+        elif symbol == "(":
             return ["s17", "Abre Parênteses"]
-        elif letter == ")":
+        elif symbol == ")":
             return ["s18", "Fecha Parênteses"]
-        elif letter == ";":
+        elif symbol == ";":
             return ["s19", "Ponto e vírgula"]
         else:
             return ["Se", "Símbolo não pertence ao alfabeto"]
 
     if state =="s1":
-        if letter in numeros:
+        if symbol in numeros:
             return ["s1", "numero"]
+        elif symbol == ".":
+            return ["s2", "Número seguido de ponto (Ex: 2.)"]
+        elif symbol == "e" or symbol == "E":
+            return ["s4", "Número seguido de símbolo exponencial"]
         else:
-            return "err"
+            return ["Se", "simbolo inválido"]
+
     if state =="s2":
-        if letter.isalpha() == True:
-            return "s2"
+        if symbol in numeros:
+            return ["s3", "Número seguido de ponto e outro número"]
         else:
-            return "err"
+            return ["Se", "simbolo inválido"]
+
+    if state == "s3":
+        if symbol in numeros:
+            return ["s3", "Número seguido de ponto e outros números"]
+        else:
+            return ["Se", "simbolo inválido"]
+
+    if state == "s4":
+        if symbol == "+" or symbol == "-":
+            return ["s5", "Número elevado a um sinal"]
+        if symbol in numeros:
+            return["s6", "Número elevado a um número positivo"]
+        else:
+            return ["Se", "simbolo inválido"]
+
+    if state == "s5":
+        if symbol in numeros:
+            return["s6", "Número elevado a um número positivo ou negativo"]
+        else:
+            return ["Se", "simbolo inválido"]
+
+    if state == "s6":
+        if symbol in numeros:
+            return ["s6", "Número elevado a um número positivo ou negativo"]
+        else:
+            return ["Se", "simbolo inválido"]
+
+
+
+
+
+
+
 
 
 
@@ -137,5 +176,12 @@ if __name__ == "__main__":
 
     simbolo = input("Insira um símbolo\n")
 
-    print("\nestado: " + c.nextState("s0",simbolo)[0] + "\nidentificação: " + c.nextState("s0",simbolo)[1] + "\n")
+    estado = "s0"
+
+    for symbol in simbolo:
+
+        vetor = c.nextState(estado, symbol)
+        estado = vetor[0]
+
+    print("\nestado: " + estado + "\nidentificação: " + vetor[1] + "\n")
 
