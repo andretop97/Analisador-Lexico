@@ -1,9 +1,9 @@
 numeros = ["0","1","2","3","4","5","6","7","8","9"]
 letras = ["a","A","b","B","c","C","d","D","e","E","f","F","g","G","h","H","i","I","j","J","k","K","l","L","m","M","n","N","o","O","p","P","q","Q","r","R","s","S","t","T","u","U","v","V","x","X","y","Y","z","Z"]
-outros_simbolos = [".", '"', "*", "{", "}", "<", ">", "=", "+", "-", "/", "(", ")", ";", "_"]
+outros_simbolos = [".", '"', "*", "{", "}", "<", ">", "=", "+", "-", "/", "(", ")", ";", "_" ]
 alphabet = numeros + letras + outros_simbolos
 estados =["s0","s1","s2","s3","s4","s5","s6","s7","s8","s9","s10","s11","s12","s13","s14","s15","s16","s17","s18","s19"]
-
+valid_states = ["s1", "s3", "s6", "s9", "s10", "s13", "s14", "s15", "s16", "s17", "s18", "s20", "s21", "s22","s23", "s24"]
 def funcao_de_transicao(state , symbol):
 #    print(state)
 
@@ -93,7 +93,7 @@ def funcao_de_transicao(state , symbol):
         else:
             return ["Se", "simbolo inválido"]
 
-    if state ==  "s9" or state ==  "s13" or state ==  "s14" or state ==  "s17" or state ==  "s18" or state ==  "s19" or state ==  "s20" or state ==  "s21" or state ==  "s22" or state ==  "s23" or state ==  "s24":
+    if  state ==  "Se" or state ==  "s9" or state ==  "s13" or state ==  "s14" or state ==  "s17" or state ==  "s18" or state ==  "s19" or state ==  "s20" or state ==  "s21" or state ==  "s22" or state ==  "s23" or state ==  "s24":
         return ["Se", "simbolo inválido"]
 
     if state == "s10":

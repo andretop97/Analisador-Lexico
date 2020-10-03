@@ -39,7 +39,7 @@ class DeterministicFiniteAutomaton:
 class LexicalAnalyzer:
     def __init__(self):
         self.symbleTable = SymbolTable()
-        self.DFA = DeterministicFiniteAutomaton( alphabet, estados, funcao_de_transicao , "s0" , ["s2"])
+        self.DFA = DeterministicFiniteAutomaton( alphabet, estados, funcao_de_transicao , "s0" , valid_states)
 
 
     def lexicon(self, lexeme):
@@ -52,17 +52,21 @@ class LexicalAnalyzer:
         file = open(fileName,"r")
         for line in file:
             for character in line:
-                nextState = self.DFA.nextState(state,character)
-                print(nextState)
-                if nextState == "Se":
-                    print(state)
-                    if self.DFA.isValidFinalState(state):
-                        listaLexemas.append([lexema, state])
+                currentState = self.DFA.nextState(state,character)[0]
+                print(currentState)
+                if currentState == "Se":
+                    if character not in alphabet:
+                        if self.DFA.isValidFinalState(state):
+                            listaLexemas.append([lexema, state])
                     state = "s0"
                     lexema = ""
                 else:
-                    state = nextState
+                    state = currentState
                     lexema = lexema + character
+        else:
+            if self.DFA.isValidFinalState(state):
+                listaLexemas.append([lexema, state])
+
 
         print(listaLexemas)
 
@@ -86,9 +90,9 @@ def teste():
 
 if __name__ == "__main__":
 
-#    testeLexicalAnalyzer = LexicalAnalyzer()
-#    testeLexicalAnalyzer.readFile("text.txt")
+    testeLexicalAnalyzer = LexicalAnalyzer()
+    testeLexicalAnalyzer.readFile("text.txt")
 
-    teste()
+
 
 
