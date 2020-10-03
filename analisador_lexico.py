@@ -53,10 +53,10 @@ class LexicalAnalyzer:
         for line in file:
             for character in line:
                 currentState = self.DFA.nextState(state,character)[0]
-                print(currentState)
                 if currentState == "Se":
                     if character not in alphabet:
                         if self.DFA.isValidFinalState(state):
+                            self.symbleTable.addSymbol(lexema, lexema, "")
                             listaLexemas.append([lexema, state])
                     state = "s0"
                     lexema = ""
@@ -67,8 +67,6 @@ class LexicalAnalyzer:
             if self.DFA.isValidFinalState(state):
                 listaLexemas.append([lexema, state])
 
-
-        print(listaLexemas)
 
 
 def teste():
@@ -92,6 +90,8 @@ if __name__ == "__main__":
 
     testeLexicalAnalyzer = LexicalAnalyzer()
     testeLexicalAnalyzer.readFile("text.txt")
+
+    print(testeLexicalAnalyzer.symbleTable.symbol)
 
 
 
