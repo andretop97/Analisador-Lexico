@@ -1,4 +1,4 @@
-from funcao_de_transicao import * 
+from funcao_de_transicao import *
 
 class SymbolTable():
     def __init__(self):
@@ -29,14 +29,14 @@ class DeterministicFiniteAutomaton:
 
     # Função que recebe estado e o simbolo , para a paritr dele e da função de transição retornar o proximo estado
     def nextState(self , currentState, symbol):
-#        if self.isValidSymbol(symbol):
-#            return self.transitionFunction(currentState , symbol)
-#        else:
-#            return ["Se", "Símbolo não pertence ao alfabeto (externo)"]
-        return self.transitionFunction(currentState , symbol)
+        if self.isValidSymbol(symbol):
+            return self.transitionFunction(currentState , symbol)
+        else:
+            return ["Se", "Símbolo não pertence ao alfabeto (externo)"]
+        # return self.transitionFunction(currentState , symbol)
 
 
-        
+
 class LexicalAnalyzer:
     def __init__(self):
         self.symbleTable = SymbolTable()
@@ -62,7 +62,7 @@ class LexicalAnalyzer:
                 currentState = self.DFA.nextState(state,character)[0]
 #print(currentState)
                 if currentState == "Se":
-                    if character == " " or character == EOFError or character == "\n": #Determinando as condições para para de ler um lexema e registrar ele
+                    if character == " "  or character == "\n": #Determinando as condições para para de ler um lexema e registrar ele
                         if currentState == "s8" or currentState == "s12": #Os estados descritos aqui são os q indicam estar dentro de aspas ou chaves
                             return "Erro" #Ainda deve ser implementado
                         elif erro != "": #Caso já esteja registrando um falso lexema continua até ele terminar
@@ -77,6 +77,11 @@ class LexicalAnalyzer:
                         state = currentState
                         erro = lexema + erro + character
                         lexema = ""
+
+                    currentState = self.DFA.nextState("s0",character)[0]
+                    if currentState != "Se":
+                        state = currentState
+                        lexema = character
                 else: #Continua a contruir um lexema
                     state = currentState
                     lexema = lexema + character
@@ -111,6 +116,7 @@ def teste():
 if __name__ == "__main__":
 
     testeLexicalAnalyzer = LexicalAnalyzer()
+    # testeLexicalAnalyzer.readFile("programa_fonte.txt")
     testeLexicalAnalyzer.readFile("text.txt")
 
     print("\nTabela de símbolos")

@@ -1,12 +1,11 @@
 numeros = ["0","1","2","3","4","5","6","7","8","9"]
 letras = ["a","A","b","B","c","C","d","D","e","E","f","F","g","G","h","H","i","I","j","J","k","K","l","L","m","M","n","N","o","O","p","P","q","Q","r","R","s","S","t","T","u","U","v","V","x","X","y","Y","z","Z"]
-outros_simbolos = [".", '"', "*", "{", "}", "<", ">", "=", "+", "-", "/", "(", ")", ";", "_"]
+outros_simbolos = [".", '"', "*", "{", "}", "<", ">", "=", "+", "-", "/", "(", ")", ";", "_"," "]
 alphabet = numeros + letras + outros_simbolos
 estados =["s0","s1","s2","s3","s4","s5","s6","s7","s8","s9","s10","s11","s12","s13","s14","s15","s16","s17","s18","s19"]
 valid_states = ["s1", "s3", "s6", "s9", "s10", "s13", "s14", "s15", "s16", "s17", "s18", "s20", "s21", "s22","s23", "s24"]
 def funcao_de_transicao(state , symbol):
 #    print(state)
-
     if state == "s0":
         if symbol in numeros:
             return ["s1", "numero"]
@@ -31,7 +30,7 @@ def funcao_de_transicao(state , symbol):
         elif symbol == "+" or symbol == "-" or symbol == "*" or symbol == "/":
             return ["s20", "Operador matemático"]
         else:
-            return ["Se", "Símbolo não pertence ao alfabeto"]
+            return ["Se", "simbolo inválido"]
 
     if state =="s1":
         if symbol in numeros:
