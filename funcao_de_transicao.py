@@ -91,8 +91,12 @@ def funcao_de_transicao(state , symbol):
     if  state ==  "Se" or state ==  "s9" or state ==  "s13" or state ==  "s14" or state ==  "s17" or state ==  "s18" or state ==  "s19" or state ==  "s20" or state ==  "s21" or state ==  "s22" or state ==  "s23" or state ==  "s24":
         return ["Se", "simbolo inválido"]
 
+    if state ==  "SE":
+        return ["SE", "Símbolo não pertence ao alfabeto (externo)"]
+
+
     if state == "s10":
-        if symbol in letras or symbol == "_":
+        if symbol in letras+numeros or symbol == "_":
             return ["s10", "Identificador"]
         else:
             return ["Se", "simbolo inválido"]

@@ -32,7 +32,8 @@ class DeterministicFiniteAutomaton:
         if self.isValidSymbol(symbol):
             return self.transitionFunction(currentState , symbol)
         else:
-            return ["Se", "Símbolo não pertence ao alfabeto (externo)"]
+#            print("batata")
+            return ["SE", "Símbolo não pertence ao alfabeto (externo)"]
         # return self.transitionFunction(currentState , symbol)
 
 
@@ -61,7 +62,12 @@ class LexicalAnalyzer:
             for character in line: #Passa por todos os símbolos do arquivo um a um
                 currentState = self.DFA.nextState(state,character)[0]
 #print(currentState)
-                if currentState == "Se":
+                if currentState == "Se" or currentState == "SE":
+                    specialState = self.DFA.nextState("s0",character)[0]
+                    #print("\ncharacter: " + character)
+                    #print("\current state: " + currentState)
+                    #print("\specialstate: " + specialState)
+
                     if character == " "  or character == "\n": #Determinando as condições para para de ler um lexema e registrar ele
                         if currentState == "s8" or currentState == "s12": #Os estados descritos aqui são os q indicam estar dentro de aspas ou chaves
                             return "Erro" #Ainda deve ser implementado
@@ -73,20 +79,27 @@ class LexicalAnalyzer:
                             listaLexemas.append([lexema, state])
                         state = "s0"
                         lexema = ""
+
+                    elif specialState != "Se" and currentState != "SE":
+                        self.symbleTable.addSymbol(lexema, lexema, "") #######
+                        listaLexemas.append([lexema, state])
+                        state = specialState
+                        lexema = character
+                        #print(character)
+
                     else: #Não para de registrar qdo encontra um simbolo inválido, mas guarda ele separadamente
+                        #print(erro)
                         state = currentState
                         erro = lexema + erro + character
                         lexema = ""
 
-                    currentState = self.DFA.nextState("s0",character)[0]
-                    if currentState != "Se":
-                        state = currentState
-                        lexema = character
+
                 else: #Continua a contruir um lexema
                     state = currentState
                     lexema = lexema + character
         else: #Registra o último lexema do arquivo
             if self.DFA.isValidFinalState(state):
+                self.symbleTable.addSymbol(lexema, lexema, "") ##################
                 listaLexemas.append([lexema, state])
 
 
@@ -116,8 +129,8 @@ def teste():
 if __name__ == "__main__":
 
     testeLexicalAnalyzer = LexicalAnalyzer()
-    # testeLexicalAnalyzer.readFile("programa_fonte.txt")
-    testeLexicalAnalyzer.readFile("text.txt")
+    testeLexicalAnalyzer.readFile("programa_fonte.txt")
+    #testeLexicalAnalyzer.readFile("text.txt")
 
     print("\nTabela de símbolos")
 for item in testeLexicalAnalyzer.symbleTable.symbol:
