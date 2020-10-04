@@ -60,6 +60,14 @@ class LexicalAnalyzer:
         file = open(fileName,"r") #Lê o arquivo indicado
         for line in file:
             for character in line: #Passa por todos os símbolos do arquivo um a um
+
+                #print(state)
+                if state == "s19":
+                    print("\ncharacter: " + character)
+                    print("\nstate: " + state)
+                    print("\nspecialstate: " + specialState)
+
+
                 currentState = self.DFA.nextState(state,character)[0]
 #print(currentState)
                 if currentState == "Se" or currentState == "SE":
@@ -67,6 +75,11 @@ class LexicalAnalyzer:
                     #print("\ncharacter: " + character)
                     #print("\current state: " + currentState)
                     #print("\specialstate: " + specialState)
+
+                    if state == "s19":
+                        print("\ncharacter: " + character)
+                        print("\current state: " + currentState)
+                        print("\specialstate: " + specialState)
 
                     if character == " "  or character == "\n": #Determinando as condições para para de ler um lexema e registrar ele
                         if currentState == "s8" or currentState == "s12": #Os estados descritos aqui são os q indicam estar dentro de aspas ou chaves
@@ -85,7 +98,8 @@ class LexicalAnalyzer:
                         listaLexemas.append([lexema, state])
                         state = specialState
                         lexema = character
-                        #print(character)
+                        print(specialState)
+                        print(character)
 
                     else: #Não para de registrar qdo encontra um simbolo inválido, mas guarda ele separadamente
                         #print(erro)
@@ -129,8 +143,8 @@ def teste():
 if __name__ == "__main__":
 
     testeLexicalAnalyzer = LexicalAnalyzer()
-    testeLexicalAnalyzer.readFile("programa_fonte.txt")
-    #testeLexicalAnalyzer.readFile("text.txt")
+    #testeLexicalAnalyzer.readFile("programa_fonte.txt")
+    testeLexicalAnalyzer.readFile("text.txt")
 
     print("\nTabela de símbolos")
 for item in testeLexicalAnalyzer.symbleTable.symbol:
