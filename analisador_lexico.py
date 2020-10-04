@@ -32,11 +32,7 @@ class DeterministicFiniteAutomaton:
         if self.isValidSymbol(symbol):
             return self.transitionFunction(currentState , symbol)
         else:
-#            print("batata")
             return ["SE", "Símbolo não pertence ao alfabeto (externo)"]
-        # return self.transitionFunction(currentState , symbol)
-
-
 
 class LexicalAnalyzer:
     def __init__(self):
@@ -92,6 +88,8 @@ class LexicalAnalyzer:
             if self.DFA.isValidFinalState(state):
                 self.symbleTable.addSymbol(lexema, lexema, "") 
                 listaLexemas.append([lexema, state])
+            else:
+                listaErros.append(erro)
 
         print("Lista de lexemas: ")
         print(listaLexemas)
@@ -99,28 +97,11 @@ class LexicalAnalyzer:
         print(listaErros)
 
 
-def teste():
-
-    c = DeterministicFiniteAutomaton(alphabet, estados, funcao_de_transicao , "s0" , ["s1", "s3", "s6", "s9", "s10", "s13", "s14", "s15", "s16", "s17", "s18", "s20", "s21", "s22","s23", "s24"])
-
-    simbolo = input("Insira um símbolo\n")
-    estado = "s0"
-
-    for symbol in simbolo:
-        vetor = c.nextState(estado, symbol)
-        estado = vetor[0]
-
-    print("\nestado: " + estado + "\nidentificação: " + vetor[1] + "\n")
-
-
-
-
-
 if __name__ == "__main__":
 
     testeLexicalAnalyzer = LexicalAnalyzer()
-    testeLexicalAnalyzer.readFile("programa_fonte.txt")
-    #testeLexicalAnalyzer.readFile("text.txt")
+    #testeLexicalAnalyzer.readFile("programa_fonte.txt")
+    testeLexicalAnalyzer.readFile("text.txt")
 
     print("\nTabela de símbolos")
 for item in testeLexicalAnalyzer.symbleTable.symbol:
