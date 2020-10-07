@@ -132,8 +132,8 @@ class LexicalAnalyzer:
 if __name__ == "__main__":
 
     testeLexicalAnalyzer = LexicalAnalyzer()
-    #testeLexicalAnalyzer.analyzer("programa_fonte.txt")
-    testeLexicalAnalyzer.analyzer("text.txt")
+    testeLexicalAnalyzer.analyzer("programa_fonte.txt")
+    #testeLexicalAnalyzer.analyzer("text.txt")
 
     print("\nTabela de símbolos")
     for item in testeLexicalAnalyzer.symbleTable.symbol:
