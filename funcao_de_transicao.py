@@ -5,9 +5,9 @@ alphabet = numeros + letras + outros_simbolos
 estados =["s0","s1","s2","s3","s4","s5","s6","s7","s8","s9","s10","s11","s12","s13","s14","s15","s16","s17","s18","s19"]
 Dicionario_de_erros = {"1":"Simbolo não pertence ao alfabeto", "2":"Estado invalido", "3":"Nao fechou aspas", "4":"Não fechou a chave"}
 valid_states = ["s1", "s3", "s6", "s9", "s10", "s13", "s14", "s15", "s16", "s17", "s18", "s19", "s20", "s21", "s22","s23", "s24"]
-def funcao_de_transicao(state , symbol):
-#    print(state)
-    if state == "s0":
+initialState = ["s0","Estado inicial"]
+def funcao_de_transicao(state, symbol):
+    if state[0] == "s0":
         if symbol in numeros:
             return ["s1", "numero"]
         elif symbol == '"':
@@ -33,7 +33,7 @@ def funcao_de_transicao(state , symbol):
         else:
             return ["Se", "simbolo inválido"]
 
-    if state =="s1":
+    if state[0] =="s1":
         if symbol in numeros:
             return ["s1", "numero"]
         elif symbol == ".":
@@ -43,13 +43,13 @@ def funcao_de_transicao(state , symbol):
         else:
             return ["Se", "simbolo inválido"]
 
-    if state =="s2":
+    if state[0] =="s2":
         if symbol in numeros:
             return ["s3", "Número seguido de ponto e outro número"]
         else:
             return ["Se", "simbolo inválido"]
 
-    if state == "s3":
+    if state[0] == "s3":
         if symbol in numeros:
             return ["s3", "Número seguido de ponto e outros números"]
         elif symbol == "e" or symbol == "E":
@@ -57,7 +57,7 @@ def funcao_de_transicao(state , symbol):
         else:
             return ["Se", "simbolo inválido"]
 
-    if state == "s4":
+    if state[0] == "s4":
         if symbol == "+" or symbol == "-":
             return ["s5", "Número elevado a um sinal"]
         if symbol in numeros:
@@ -65,56 +65,58 @@ def funcao_de_transicao(state , symbol):
         else:
             return ["Se", "simbolo inválido"]
 
-    if state == "s5":
+    if state[0] == "s5":
         if symbol in numeros:
             return["s6", "Número elevado a um número positivo ou negativo"]
         else:
             return ["Se", "simbolo inválido"]
 
-    if state == "s6":
+    if state[0] == "s6":
         if symbol in numeros:
             return ["s6", "Número elevado a um número positivo ou negativo"]
         else:
             return ["Se", "simbolo inválido"]
 
-    if state == "s7":
+    if state[0] == "s7":
         if symbol == '"':
-            return ["s9", "Constante literal vazia finalizado"]
+            return ["s9", "Constante literal"]
         else:
-            return ["s8", "Constante literal não finalizada"]
+            return ["s8", "3"]
 
-    if state == "s8":
+    if state[0] == "s8":
         if symbol == '"':
-            return ["s9", "Constante literal finalizada"]
+            return ["s9", "Constante literal"]
         else:
-            return ["s8", "Constante literal não finalizada"]
+            return ["s8", "3"]
 
-    if  state ==  "Se" or state ==  "s9" or state ==  "s13" or state ==  "s14" or state ==  "s17" or state ==  "s18" or state ==  "s19" or state ==  "s20" or state ==  "s21" or state ==  "s22" or state ==  "s23" or state ==  "s24":
-        return ["Se", "simbolo inválido"]
+    if state[0] ==  "Se" and state[1] == "1":
+        return ["Se", "1"]
 
-    if state ==  "SE":
-        return ["SE", "Símbolo não pertence ao alfabeto"]
+    if  state[0] == "Se" and state[1] == "2":
+        return ["Se", "2"]
 
+    if state[0] ==  "s9" or state[0] ==  "s13" or state[0] ==  "s14" or state[0] ==  "s17" or state[0] ==  "s18" or state[0] ==  "s19" or state[0] ==  "s20" or state[0] ==  "s21" or state[0] ==  "s22" or state[0] ==  "s23" or state[0] ==  "s24":
+        return ["Se", "2"]
 
-    if state == "s10":
+    if state[0] == "s10":
         if symbol in letras+numeros or symbol == "_":
             return ["s10", "Identificador"]
         else:
             return ["Se", "simbolo inválido"]
 
-    if state == "s11":
+    if state[0] == "s11":
         if symbol == "}":
-            return ["s13", "Comentário vazio finalizado"]
+            return ["s13", "Comentário"]
         else:
-            return ["s12", "Comentário não finalizado"]
+            return ["s12", "4"]
 
-    if state == "s12":
+    if state[0] == "s12":
         if symbol == "}":
-            return ["s13", "Comentário finalizado"]
+            return ["s13", "Comentário"]
         else:
-            return ["s12", "Comentário não finalizado"]
+            return ["s12", "4"]
 
-    if state == "s15":
+    if state[0] == "s15":
         if symbol == "=":
             return ["s21", "Menor igual"]
         elif symbol == ">":
@@ -124,7 +126,7 @@ def funcao_de_transicao(state , symbol):
         else:
             return ["Se", "simbolo inválido"]
 
-    if state == "s16":
+    if state[0] == "s16":
         if symbol == "=":
             return ["s24", "Maior igual"]
         else:

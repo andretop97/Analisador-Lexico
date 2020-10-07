@@ -30,16 +30,16 @@ class DeterministicFiniteAutomaton:
 
     # Função que recebe estado e o simbolo , para a paritr dele e da função de transição retornar o proximo estado
     def nextState(self , currentState, symbol):
-        if self.isValidSymbol(symbol) or currentState =="s8":
+        if self.isValidSymbol(symbol) or currentState[0] =="s8" or currentState[0] =="s12":
             return self.transitionFunction(currentState , symbol)
         else:
-            return ["SE", "1"]
+            return ["Se", "1"]
 
 
 class LexicalAnalyzer:
     def __init__(self):
         self.symbleTable = SymbolTable()
-        self.DFA = DeterministicFiniteAutomaton( alphabet, estados, funcao_de_transicao , "s0" , valid_states)
+        self.DFA = DeterministicFiniteAutomaton( alphabet, estados, funcao_de_transicao , initialState , valid_states)
         self.errors = []
         self.initSymbleTable()
 
@@ -68,7 +68,7 @@ class LexicalAnalyzer:
         return open(fileName,"r") #Lê o arquivo indicado
 
     def analyzer(self , fileName):
-        state = ["s0","Estado inicial"]
+        state = initialState
         lexema = ""
         erro = ""
         lineNumber = 1
@@ -76,32 +76,41 @@ class LexicalAnalyzer:
         file = self.readFile(fileName)
         for line in file:
             for character in line: #Passa por todos os símbolos do arquivo um a um
-                currentState = self.DFA.nextState(state[0],character)
-                if currentState[0] == "Se" or currentState[0] == "SE":
-                    specialState = self.DFA.nextState("s0",character)
+                currentState = self.DFA.nextState(state, character)
+                if currentState[0] == "Se":
+                    specialState = self.DFA.nextState(initialState, character)
                     if character == " "  or character == "\n": #Determinando as condições para para de ler um lexema e registrar ele
-                        if state[0] == "s8": #O estado descrito aqui adiciona um erro caso a linha termine sem fechar aspas
-                            self.errors.append([erro,lineNumber, columnNumber, "3"])
-                        elif state[0] == "s12": #O estado descrito aqui adiciona um erro caso a linha termine sem fechar chaves
-                            self.errors.append([erro,lineNumber, columnNumber, "4"])
-                        elif erro != "": #Caso já esteja registrando um falso lexema continua até ele terminar
-                            self.errors.append([erro,lineNumber, columnNumber, "2"])
+                        if erro != "": #Caso já esteja registrando um falso lexema continua até ele terminar
+                            self.errors.append([erro,lineNumber, columnNumber, currentState[1]])
                             erro = ""
                         elif self.DFA.isValidFinalState(state[0]): #Registra os lexemas
                             self.symbleTable.addSymbol(lexema, state[1], "")
-                        state = ["s0","Estado inicial"]
+                        state = initialState
                         lexema = ""
-
-                    elif specialState[0] != "Se" and currentState[0] != "SE":
-                        self.symbleTable.addSymbol(lexema, state[1], "") #######
+                    elif specialState[0] != "Se" and currentState[1] != "1":#Permite que seja salvo um lexema logo após outro sem um espaço em branco
+                        self.symbleTable.addSymbol(lexema, state[1], "")
                         state = specialState
                         lexema = character
-                       
-
                     else: #Não para de registrar qdo encontra um simbolo inválido, mas guarda ele separadamente
                         state = currentState
                         erro = lexema + erro + character
                         lexema = ""
+                elif state[0] == "s8" or state[0] == "s12": #O estado descrito aqui adiciona um erro caso a linha termine sem fechar aspas
+                    if state[0] == "s8" and character == '"':
+                        lexema =  lexema + character
+                        self.symbleTable.addSymbol(lexema, currentState[1], "")
+                        state = initialState
+                        lexema = ""
+                    elif state[0] == "s12" and character == "}":
+                        state = initialState
+                        lexema = ""
+                    elif character == "\n" or character == EOFError:
+                        self.errors.append([lexema,lineNumber, columnNumber, currentState[1]])
+                        lexema = ""
+                        state = initialState
+                    else:
+                        lexema = lexema + character
+
 
                 else: #Continua a contruir um lexema
                     state = currentState
@@ -112,14 +121,19 @@ class LexicalAnalyzer:
             lineNumber += 1
         else: #Registra o último lexema do arquivo
             if self.DFA.isValidFinalState(state[0]):
-                self.symbleTable.addSymbol(lexema, state[1], "") ##################
+                self.symbleTable.addSymbol(lexema, state[1], "")
+            else:
+                if state[0] == "s8" or state[0] == "s12":
+                    self.errors.append([lexema,lineNumber, columnNumber, currentState[1]])
+                else:
+                    self.errors.append([erro,lineNumber, columnNumber, currentState[1]])               
 
 
 if __name__ == "__main__":
 
     testeLexicalAnalyzer = LexicalAnalyzer()
-    testeLexicalAnalyzer.analyzer("programa_fonte.txt")
-    # testeLexicalAnalyzer.readFile("text.txt")
+    #testeLexicalAnalyzer.analyzer("programa_fonte.txt")
+    testeLexicalAnalyzer.analyzer("text.txt")
 
     a = testeLexicalAnalyzer.lexicon("batata")
     print(a)
