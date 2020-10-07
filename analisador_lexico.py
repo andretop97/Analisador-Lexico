@@ -135,9 +135,6 @@ if __name__ == "__main__":
     #testeLexicalAnalyzer.analyzer("programa_fonte.txt")
     testeLexicalAnalyzer.analyzer("text.txt")
 
-    a = testeLexicalAnalyzer.lexicon("batata")
-    print(a)
-    
     print("\nTabela de símbolos")
     for item in testeLexicalAnalyzer.symbleTable.symbol:
         print(testeLexicalAnalyzer.symbleTable.symbol[item])
