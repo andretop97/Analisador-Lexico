@@ -36,8 +36,6 @@ class DeterministicFiniteAutomaton:
             return ["SE", "1"]
 
 
-
-
 class LexicalAnalyzer:
     def __init__(self):
         self.symbleTable = SymbolTable()

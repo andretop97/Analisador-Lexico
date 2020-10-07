@@ -13,7 +13,7 @@ def funcao_de_transicao(state , symbol):
         elif symbol == '"':
             return ["s7", "Abre aspas"]
         elif symbol in letras:
-            return ["s10", "letra"]
+            return ["s10", "Identificador"]
         elif symbol == "{":
             return ["s11", "Abre chaves"]
         elif symbol == "=":
