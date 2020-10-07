@@ -65,21 +65,24 @@ class LexicalAnalyzer:
             return []
 
     def readFile(self , fileName):
+        return open(fileName,"r") #Lê o arquivo indicado
+
+    def analyzer(self , fileName):
         state = ["s0","Estado inicial"]
         lexema = ""
         erro = ""
         lineNumber = 1
         columnNumber = 0
-        file = open(fileName,"r") #Lê o arquivo indicado
+        file = self.readFile(fileName)
         for line in file:
             for character in line: #Passa por todos os símbolos do arquivo um a um
                 currentState = self.DFA.nextState(state[0],character)
                 if currentState[0] == "Se" or currentState[0] == "SE":
                     specialState = self.DFA.nextState("s0",character)
                     if character == " "  or character == "\n": #Determinando as condições para para de ler um lexema e registrar ele
-                        if state[0] == "s8": #Os estados descritos aqui são os q indicam estar dentro de aspas ou chaves
+                        if state[0] == "s8": #O estado descrito aqui adiciona um erro caso a linha termine sem fechar aspas
                             self.errors.append([erro,lineNumber, columnNumber, "3"])
-                        elif state[0] == "s12":
+                        elif state[0] == "s12": #O estado descrito aqui adiciona um erro caso a linha termine sem fechar chaves
                             self.errors.append([erro,lineNumber, columnNumber, "4"])
                         elif erro != "": #Caso já esteja registrando um falso lexema continua até ele terminar
                             self.errors.append([erro,lineNumber, columnNumber, "2"])
@@ -115,7 +118,7 @@ class LexicalAnalyzer:
 if __name__ == "__main__":
 
     testeLexicalAnalyzer = LexicalAnalyzer()
-    testeLexicalAnalyzer.readFile("programa_fonte.txt")
+    testeLexicalAnalyzer.analyzer("programa_fonte.txt")
     # testeLexicalAnalyzer.readFile("text.txt")
 
     a = testeLexicalAnalyzer.lexicon("batata")
