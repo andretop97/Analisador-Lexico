@@ -11,7 +11,6 @@ class SymbolTable():
     def checkSymbolExistence(self , lexeme):
         return lexeme in self.symbol
 
-
 class DeterministicFiniteAutomaton:
     def __init__ (self , alphabet , states , transitionFunction , initialState , validStates):
         self.alphabet = alphabet
@@ -34,7 +33,6 @@ class DeterministicFiniteAutomaton:
             return self.transitionFunction(currentState , symbol)
         else:
             return ["Se", "1"]
-
 
 class LexicalAnalyzer:
     def __init__(self):
@@ -110,12 +108,9 @@ class LexicalAnalyzer:
                         state = initialState
                     else:
                         lexema = lexema + character
-
-
                 else: #Continua a contruir um lexema
                     state = currentState
                     lexema = lexema + character
-
                 columnNumber +=1
             columnNumber = 0
             lineNumber += 1
@@ -128,21 +123,15 @@ class LexicalAnalyzer:
                 else:
                     self.errors.append([erro,lineNumber, columnNumber, currentState[1]])               
 
-
 if __name__ == "__main__":
 
-    testeLexicalAnalyzer = LexicalAnalyzer()
-    testeLexicalAnalyzer.analyzer("programa_fonte.txt")
-    #testeLexicalAnalyzer.analyzer("text.txt")
+    lexicalAnalyzer = LexicalAnalyzer()
+    lexicalAnalyzer.analyzer("programa_fonte.txt")
 
     print("\nTabela de símbolos")
-    for item in testeLexicalAnalyzer.symbleTable.symbol:
-        print(testeLexicalAnalyzer.symbleTable.symbol[item])
+    for item in lexicalAnalyzer.symbleTable.symbol:
+        print(lexicalAnalyzer.symbleTable.symbol[item])
 
     print("\nErros")
-    for erro in testeLexicalAnalyzer.errors:
+    for erro in lexicalAnalyzer.errors:
         print("Erro: " , erro[0] , " na linha: " , erro[1] , " e coluna: " , erro[2], Dicionario_de_erros[erro[3]])
-
-
-
-
